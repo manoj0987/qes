@@ -1,0 +1,40 @@
+{% include 'navbar.html' %}
+{% load static %}
+{% load humanize %}
+<!DOCTYPE html>
+<html lang="en">
+<head></head>
+<body>
+    
+    <div class="container-det my-4">
+        <h2>Detail page</h2>
+        <h3>{{quest.title}}</h3>
+        <p>
+            <span>{{quest.add_time|date:'d/m/Y'}}</span>
+            <a href="#">{{quest.user.username}}</a>
+        </p>
+        <hr/>
+        <div class="row">
+            <div class="upvote">
+                <strong>123</strong><br>
+                <span class="text-success"><i class="bi bi-arrow-up"></i></span>
+            </div>
+            <div class="downvote mt-3">
+                <span class="text-danger"><i class="bi bi-arrow-down"></i></span><br>
+                <strong>12</strong>
+            </div>
+        </div>
+        <div class="col-l1">
+            <p>Lorem, ipsum dolor sit amet
+            consectetur adipisicing elit. Veritatis, commodi?
+            </p>
+            <p><a href="#">user</a></p>
+            <p>Tags:
+                {% for tag in tags %}
+                <a href="#">{{tag}}</a>
+                {% endfor %}
+            </p>
+        </div>
+    </div>
+</body>
+</html>

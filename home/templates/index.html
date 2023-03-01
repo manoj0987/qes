@@ -1,0 +1,148 @@
+{% include 'navbar.html' %}
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+
+</head>
+<body>
+    <style>
+        .section-1 { display: flex; margin-top: 6px; background-color: #eeeeeef5; padding: 5px 40px 0px 60px;}
+
+        /* Side-Menu */
+
+        .side-menu { 
+            width: 20%;
+            margin: 10px 0px 0px 10px; 
+            background-color: #fff;
+            box-shadow: 0 0 5px rgb(66, 66, 66);
+            border-radius: 5px;
+            padding: 10px;
+        }
+
+        .post {
+            margin: 5px;
+            padding: 10px;
+            background-color: #e8d5c4c1;
+            color: #787878;
+            border-radius: 5px;
+            text-align: center;
+            border: 2px solid transparent;
+        }
+
+        .post:hover { border: 2px solid #c5bab0;}
+
+
+        .container { width: 80%; margin: 15px 15px 0px 15px;}
+
+        /* Q-Box */
+
+        .sec-ask {
+            background-color: #fff;
+            padding: 10px;
+            box-shadow: 0 0 5px rgb(66, 66, 66);
+            border-radius: 5px;
+        }
+
+        .sec-ask .d-flex input { background-color: #fff7eb8e; color: #acacac; margin: 5px;}
+
+        .sec-ask .d-flex input:hover { background-color: #fff;}
+
+        .q-det { display: flex; justify-content: space-around; margin-top: 5px;}
+
+        .q-det li { font-weight: 500; padding: 3px 50px; border-radius: 10px;}
+
+        .q-det li:hover { background-color: #fff1dc;}
+
+        li.bi.bi-question:before {font-size: 20px;}
+
+        /* Main-Section */
+        .main-content {  
+            background-color: #fff;
+            box-shadow: 0 0 5px rgb(66, 66, 66);
+            border-radius: 5px;
+            margin-top: 20px;
+            padding: 15px;
+        }
+
+        .page { margin-top: 16px;}
+
+        .pagination { width: fit-content; box-shadow: 0 0 5px rgb(66, 66, 66); border-radius: 5px;}
+        .pagination:hover { box-shadow: 0 0 8px rgb(66, 66, 66);}
+
+    </style>
+    
+    <section class="section-1"> 
+        <div class="side-menu">
+            <h4>Topics</h4>
+            <div class="post">+ Create Tag</div>
+            <ul>
+                <li>Software</li>
+                <li>Development</li>
+                <li>AI</li>
+                <li>ML</li>
+                <li>Python</li>
+                <li>Java</li>
+                <li>HTML</li>
+                <li>CSS</li>
+            </ul>
+            <div class="foot">
+                <li><a href="">About</a></li>
+                <li><a href="">Privacy</a></li>
+                <li><a href="">Terms</a></li>
+                <p>Made with <span style="color:red;font-size: 18px;">&hearts;</span> by Manoj</p>
+            </div>
+        </div>
+
+        <!-- Q-Box -->
+        <div class="container">
+            <div class="sec-ask">
+                <div class="q-box">
+                    <form class="d-flex">
+                        <input class="form-control" type="search" placeholder="What do you want to ask or share?" aria-label="Search">
+                    </form>
+                </div>
+                <div class="q-det">
+                    <li class="bi bi-question"><a href="ask"> Ask</a></li>|
+                    <li class="bi bi-pen"><a href="ask"> Answer</a></li>|
+                    <li class="bi bi-pencil-square"><a href="ask"> Post</a></li>
+                </div>
+            </div>
+
+            <!-- Main-Content -->
+            <div class="main-content">
+                <h3>main content</h3>
+                {% for quest in quests %}
+            
+            <h2>Questions</h2>
+            <h4><a href="/detail/{{quest.id}}">{{quest.title}}</a></h4>
+            <p>
+                <a href="#">{{quest.user.username}}</a>
+                <a href="#">{{quest.detail}}</a>
+                <a href="#">comment</a>
+            </p>
+                {% endfor %}
+            </div>
+            <!-- pagination -->
+            <nav aria-label="Page navigation example" class="page">
+                <ul class="pagination">
+                    {% if quests.has_previous %}
+                  <li class="page-item"><a class="page-link" href="?page={{quests.previous_page_number}}">Previous</a></li>
+                    {% endif %}
+                        {% for i in quests.paginator.page_range %}
+                            {% if quests.number == i %}
+                  <li class="page-item active"><a class="page-link" href="#">{{i}}</a></li>
+                            {% else %}
+                  <li class="page-item"><a class="page-link" href="?page={{i}}">{{i}}</a></li>
+                            {% endif %}
+                        {% endfor %}
+                    {% if quests.has_next %}
+                  <li class="page-item"><a class="page-link" href="?page={{quests.next_page_number}}">Next</a></li>
+                    {% endif %}
+                </ul>
+              </nav>
+        </div>
+        
+    </section>
+</body>
+</html>
