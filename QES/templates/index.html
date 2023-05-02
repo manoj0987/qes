@@ -1,0 +1,154 @@
+{% include 'navbar.html' %}
+{% load static %}
+{% block content %}
+    <style>
+        .section-1 { display: flex; margin-top: 6px; background-color: #eeeeeef5; padding: 5px 40px 0px 60px;}
+
+        /* Side-Menu */
+
+        .side-menu { 
+            width: 20%;
+            margin: 10px 0px 0px 10px; 
+            background-color: #fff;
+            box-shadow: 0 0 5px rgb(66, 66, 66);
+            border-radius: 5px;
+            padding: 10px;
+            height: max-content;
+        }
+
+        .post {
+            margin: 5px;
+            padding: 10px;
+            background-color: #e8d5c4c1;
+            color: #787878;
+            border-radius: 5px;
+            text-align: center;
+            border: 2px solid transparent;
+        }
+
+        .post:hover { border: 2px solid #c5bab0;}
+
+
+        .container { width: 80%; margin: 15px 15px 0px 15px;}
+
+        /* Q-Box */
+
+        .sec-ask {
+            background-color: #fff;
+            padding: 10px;
+            box-shadow: 0 0 5px rgb(66, 66, 66);
+            border-radius: 5px;
+        }
+
+        .sec-ask .d-flex input { background-color: #fff7eb8e; color: #acacac; margin: 5px;}
+
+        .sec-ask .d-flex input:hover { background-color: #fff;}
+
+        .q-det { display: flex; justify-content: space-around; margin-top: 5px;}
+
+        .q-det li { font-weight: 500; padding: 3px 50px; border-radius: 10px;}
+
+        .q-det li:hover { background-color: #fff1dc;}
+
+        li.bi.bi-question:before {font-size: 20px;}
+
+        /* Main-Section */
+        .main-content {  
+            background-color: #fff;
+            box-shadow: 0 0 5px rgb(66, 66, 66);
+            border-radius: 5px;
+            margin-top: 20px;
+            padding: 15px;
+        }
+        .page { margin-top: 16px;}
+
+        .pagination { width: fit-content; box-shadow: 0 0 5px rgb(66, 66, 66); border-radius: 5px;}
+        .pagination:hover { box-shadow: 0 0 8px rgb(66, 66, 66);}
+
+    </style>
+    
+    <section class="section-1"> 
+        <div class="side-menu">
+            <h4>Topics</h4>
+            <div class="post">+ Create Tag</div>
+            <ul>
+                {% for tag in tags %}
+                <li>{{tag.name}}</li>
+                <!-- <li>Software</li>
+                <li>Development</li>
+                <li>AI</li>
+                <li>ML</li>
+                <li>Python</li>
+                <li>Java</li>
+                <li>HTML</li>
+                <li>CSS</li> -->
+                {% endfor %}
+            </ul>
+            <div class="foot">
+                <div style="display: flex; justify-content: space-evenly; margin-bottom: 8px;">
+                    <li><a href="">About</a></li>|
+                    <li><a href="">Contact</a></li>
+                </div>
+                <p style="display: flex; justify-content: center;">Made with <span style="color:red;font-size: 18px;">&hearts;</span> by Manoj</p>
+            </div>
+        </div>
+
+        <!-- Q-Box -->
+        <div class="container">
+            <div class="sec-ask">
+                <div class="q-box">
+                    <form class="d-flex">
+                        <input class="form-control" type="search" placeholder="What do you want to ask or share?" aria-label="Search">
+                    </form>
+                </div>
+                <div class="q-det">
+                    <li class="bi bi-question"><a href="{% url 'ask-question' %}"> Ask</a></li>|
+                    <li class="bi bi-pen"><a href="{% url 'ask-question' %}"> Answer</a></li>|
+                    <li class="bi bi-pencil-square"><a href="{% url 'ask-question' %}"> Post</a></li>
+                </div>
+            </div>
+
+            <!-- Main-Content -->
+            <div class="main-content">
+                <h4>Main content</h4>
+                {% for quest in quests %}
+            
+                <div class="card mb-4 shadow">
+                    <div class="card-body" style="padding: 8px;">
+                        <h5 class="card-title"><a href="/detail/{{quest.id}}">{{quest.title}}</a></h5>
+                        <p class="card-text" style="margin-bottom: 8px;">{{quest.detail}}</p>
+                        <p style="margin-bottom: 0; display: flex; justify-content: space-between;">
+                            <a href="#" class="mr-2">{{quest.user.username}}</a>
+                            <a href="/detail/{{quest.id}}" class="mr-2">{{quest.answer_set.count}} Answers</a>
+                            <a href="#" class="mr-2">{{quest.total_comments}} Comments</a>
+                        </p>
+                    </div>
+                    <div class="card-footer">
+                        <small>{{quest.add_time|date:'d/m/Y h:m:s'}}</small>
+                    </div>
+                </div>
+        
+                {% endfor %}
+            </div>
+            <!-- pagination -->
+            <nav aria-label="Page navigation example" class="page">
+                <ul class="pagination">
+                    {% if quests.has_previous %}
+                  <li class="page-item"><a class="page-link" href="?page={{quests.previous_page_number}}">Previous</a></li>
+                    {% endif %}
+                        {% for i in quests.paginator.page_range %}
+                            {% if quests.number == i %}
+                  <li class="page-item active"><a class="page-link" href="#">{{i}}</a></li>
+                            {% else %}
+                  <li class="page-item"><a class="page-link" href="?page={{i}}">{{i}}</a></li>
+                            {% endif %}
+                        {% endfor %}
+                    {% if quests.has_next %}
+                  <li class="page-item"><a class="page-link" href="?page={{quests.next_page_number}}">Next</a></li>
+                    {% endif %}
+                </ul>
+              </nav>
+        </div>
+        
+    </section>
+{% endblock %}

@@ -1,0 +1,158 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="author" content="Manoj Kumar">
+    <meta name="keywords" content="HTML, CSS, JavaScript, Python, Django framework, MySQL, Bootstrap">
+    <meta name="description" content="Quora for Engineering Students">
+    <link rel="shortcut icon" href="{% static 'img/favicon.ico' %}" type="image/x-icon">
+    <!-- Bootstrap -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-GLhlTQ8iRABdZLl6O3oVMWSktQOp6b7In1Zl3/Jr59b6EGGoI1aFkw7cmDA6j6gD" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js" integrity="sha384-w76AqPfDkMBDXo30jS1Sgez6pr3x5MlQ1ZAGC+nuZB+EYdgRZgiwxhTBTkF7CXvN" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.min.js" integrity="sha384-mQ93GR66B00ZXjt0YO5KlohRA5SY2XofN4zfuZxLkoj1gXtW8ANNCe9d5Y3eG5eD" crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.5.0/font/bootstrap-icons.css">
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js" integrity="sha384-oBqDVmMz9ATKxIep9tiCxS/Z9fNfEXiDAYTujMAeBAsjFuCZSmKbSSUnQlmh/jp3" crossorigin="anonymous"></script>
+    
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" integrity="sha512-iecdLmaskl7CVkqkXNQ/ZH/XLlvWZOJyj7Yy7tcenmpD1ypASozpmT/E0iPtmFIB46ZmdtAc9eNBvH0H/ZpiBw==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    
+    
+    <title>{% block title %}QES{% endblock %}</title>
+</head>
+<body>
+    <header>
+        <nav class="nav-bar">
+            <div class="logo">
+                <a href="/"><img src="{% static 'img/qes.gif' %}" alt="QES"></a>
+            </div>
+            <ul class="nav-menu">
+                <li><i class="bi bi-house-fill"></i><a href="/"> Home</a></li>
+                <li><i class="bi bi-question-circle-fill"></i><a href="{% url 'ask-question' %}"> Ask</a></li>
+                <li><i class="bi bi-tags-fill"></i><a href="{% url 'tags' %}"> Topics</a></li>
+                <li><a href="{% url 'notification' %}"><i class="bi bi-bell-fill"></i></a></li>
+            </ul>
+            <form class="d-flex" action="/">
+                <input class="form-control" name="q" type="search" placeholder="Search" aria-label="Search">
+                <button class="bi bi-search btn-sch" type="submit"></button>
+            </form>
+            <div style="display: flex; align-items: center;">
+                {% if user.is_authenticated %}
+                    <li class="nav-item btn" style="display: flex;">
+                        <i class="bi bi-person-fill"></i><a href="/accounts/profile">Profile</a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="{% url 'signin' %}">Log Out</a>
+                    </li>
+                {% else %}
+                    <li class="nav-item">
+                        <a href="/accounts/signin">Log In</a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="/accounts/signup">Register</a>
+                    </li>
+                {% endif %}
+            </div>
+            <!-- <div><li class="btn bi bi-person-fill"><a href="#"> Account</a></li></div> -->
+        </nav>
+    </header>
+
+    <style>
+        header { position: sticky; width: 100%;}
+        li { list-style: none; }
+        a { text-decoration: none; }
+        header {  box-shadow: 0px 15px 13px -15px #111;}
+
+        header .nav-bar{
+            display: flex;
+            margin: 0px 50px;
+            height: 70px;
+            align-items: center;
+        } 
+
+        header .nav-bar .logo a img {
+            width: 100%;
+            height: 70px;
+        }
+
+        header .nav-menu {
+            display: flex;
+            align-items: center;
+            justify-content: space-evenly;
+            margin: auto;
+            width: 50%;
+            height: 100%;
+            padding-left: 0;
+        }
+
+        header .nav-menu li, .btn { position: relative; padding: 8px;}
+        
+        header .nav-menu li:hover, .btn:hover {
+            background-color: #FFF1DC;
+            border-top-left-radius: 5px;
+            border-top-right-radius: 5px;
+        } 
+
+        header .nav-menu li a, .btn a, .nav-item a {
+            color: #3A98B9;
+            font-size: 20px;
+            font-weight: 700;
+        }
+        header .btn { margin-left: 10px;}
+        header .nav-item { margin-right: 8px; width: fit-content; }
+        header .nav-menu li:after, .btn:after {
+            content: "";
+            position: absolute;
+            width: 0%;
+            height: 3px;
+            background-color: #3A98B9;
+            left: 0;
+            bottom: -5px;
+            transition: width 0.2s ease-in-out;
+        }
+
+        header .nav-menu li:hover:after, .btn:hover:after { width: 100%;}
+        
+        header .nav-menu li a:hover, .btn a:hover { color: #000;}
+
+        header a.bi.bi-bell-fill, a.bi.bi-person-fill { color: #000;}
+
+        header .bi { color: #000; font-size: 20px;}
+
+        header .bi:hover, a.bi.bi-bell-fill:hover, a.bi.bi-person-fill:hover { color: #3A98B9;}
+
+        header .form-control {
+            margin: auto;
+            align-items: center;
+            margin-right: 0;
+            background-color: #fff7eb8f; 
+            color: #acacac;
+            border-top-right-radius:0;
+            border-bottom-right-radius:0;
+        }
+
+        header .btn-sch {
+            background: #3A98B9;
+            border: 2px solid #23657d;
+            color: #fff;
+            border-radius: 5px;
+            margin: auto;
+            align-items: center;
+            padding: 5px 10px;
+        }
+        
+        header .btn-sch:hover{ 
+            background: #198754;
+            color: #fff;
+            border: 2px solid #0f633c;
+        }
+    </style>
+
+    {% block content %}{% endblock %}
+</body>
+</html>
+
+
+

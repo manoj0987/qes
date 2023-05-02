@@ -1,0 +1,207 @@
+{% include 'navbar.html' %}
+{% load static %}
+{% load humanize %}
+{% block title %}Detail Page{% endblock %}
+{% block content %}
+    <style>
+        .container-det { margin: 0px 20px;}
+        .save-comment {
+            border: 2px solid green;
+            border-radius: 5px;
+            padding: 5px 10px;
+            color: green;
+            font-weight: 700;
+            margin-top: 10px;
+        }
+        .save-comment:hover {
+            background: green;
+            color: #fff;
+        }
+        .detail-sep {
+            display: flex;
+            padding: 0px 15px;
+        }
+        .detail-sep>.row {
+            height: fit-content;
+            padding-right: 5px;
+        }
+        .batch { 
+            outline: 1px solid #aec9e4;
+            background-color: #fffbf4;
+            padding: 5px;
+            border-radius: 5px;
+        }
+        .btn-dark {
+            font-weight: 700;
+        }
+        .btn-dark:hover { color: #0187b8; }
+        textarea { width: 100%;}
+        .ani {
+            animation: scale .1s linear forwards;
+        }
+        @keyframes scale {
+            0%{transform: scale(0.8);}
+            100%{transform: scale(1);}
+        }
+    </style>
+    
+    <div class="container-det" style="margin-top: 20px;">
+        <h5>Detail page</h5>
+        <h6>{{quest.title}}</h6>
+        <!-- <p>{{quest.detail}}</p> -->
+        <p>
+            <span>{{quest.add_time|date:'d/m/Y'}}</span>
+            <a href="#">{{quest.user.username}}</a>
+        </p>
+        <hr/>
+        <div class="detail-sep">
+            {% for answer in answers %}
+        <div class="row">
+            <div class="upvote">
+                <strong class="upvote-count-{{answer.id}}">{{answer.upvote_set.count}}</strong><br>
+                <span class="text-success"><i class="fa fa-arrow-up fa-2x upvote-click" data-answer="{{answer.id}}"></i></span>
+            </div>
+            <div class="downvote mt-3">
+                <span class="text-danger"><i class="fa fa-arrow-down fa-2x downvote-click" data-answer="{{answer.id}}"></i></span><br>
+                <strong class="downvote-count-{{answer.id}}">{{answer.downvote_set.count}}</strong>
+            </div>
+        </div>
+        <div class="col-l1">
+            <p>{{answer.detail}}</p>
+            <p><a href="#">{{answer.user.username}}</a>
+                <span class="comment-count-{{answer.id}}">{{answer.comment_set.count}} comments</span>
+                <span>{{answer.add_time|naturaltime}}</span>
+            </p>
+            <p>Tags:
+                {% for tag in tags %}
+                <a href="/tag/{{tag|slugify}}" class="batch">{{tag}}</a>
+                {% endfor %}
+            </p>
+            <!-- Comment Section  -->
+            <h3>comment</h3>
+            <div class="comment-wrapper-{{answer.id}}">
+                {% for comment in answer.comment_set.all %}
+                <div class="card" style="margin: 5px 0;">
+                    <div class="card-body" style="padding: 10px;">
+                        <p style="margin-bottom: 5px;">{{comment.comment}}</p><a href="#">{{comment.user.username}}</a>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+            {% if user.is_authenticated %}
+            <!-- Comment Form -->
+            <div class="com-card card" style="margin: 15px 0px;">
+                <h6 class="card-header" style="background-color: #dee2e6;">Add comment</h6>
+                <div class="card-body">
+                    <textarea class="form-control comment-text-{{answer.id}}"></textarea>
+                    <button type="button" data-answer="{{answer.id}}" class="save-comment">Submit</button>
+                </div>
+            </div>
+            {% endif %}
+        </div>
+        {% endfor %}
+        </div>
+
+        <!-- Answer form -->
+        {% if user.is_authenticated %}
+        {% for msg in messages %}
+            <p class="text-success">{{msg}}</p>
+        {% endfor %}
+        <form method="post">
+            {% csrf_token %}
+            <table class="table table-bordered">
+                {{answerForm.as_table}}
+                <tr>
+                    <td colspan="2">
+                        <input type="submit" class="btn btn-dark"/>
+                    </td>
+                </tr>
+            </table>
+        </form>
+        {% endif %}
+    </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.4/jquery.min.js" integrity="sha512-pumBsjNRGGqkPzKHndZMaAG+bir374sORyzM3uulLV14lN5LyykqNk8eEeUlUkB3U0M4FApyaHraT65ihJhDpQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.4/jquery.js" integrity="sha512-6DC1eE3AWg1bgitkoaRM1lhY98PxbMIbhgYCGV107aZlyzzvaWCW1nJW2vDuYQm06hXrW0As6OGKcIaAVWnHJw==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <script>
+        $(document).ready(function() {
+            $(".save-comment").on("click",function(){
+                var _comment = $(".comment-text-"+_answerid).val();
+                console.log(_comment)
+                var _answerid = $(this).data('answer');
+                //Ajax
+                $.ajax({
+                    url:"/save-comment",
+                    type:"post",
+                    data:{
+                        comment:_comment,
+                        answerid:_answerid,
+                        csrfmiddlewaretoken:"{{csrf_token}}"
+                    },
+                    dataType:'json',
+                    beforeSend:function(){
+                        $(".save-comment").addClass('disabled').text('saving...');
+                    },
+                    success:function(res){
+                        if(res.bool==true){
+                            $(".comment-text-"+_answerid).val('');
+                            var _html='<div class="card ani">\
+                                        <div class="card-body">\
+                                        <p>'+_comment+'</p>\
+                                        <a href="#">{{request.user}}</a>\
+                                        </div>\
+                             </div>';
+                             $(".comment-wrapper-"+_answerid).append(_html);
+                             var prevCount=$(".comment-count-"+_answerid).text();
+                            $(".comment-count-"+_answerid).text(parseInt(prevCount)+1);
+                        }
+                        $(".save-comment").removeClass('disabled').text('Submit');
+                    }
+                });
+            });
+
+
+            // Upvote
+        $(".upvote-click").on('click',function(){
+            var answerid=$(this).data('answer');
+            // Ajax
+            $.ajax({
+                url:"/save-upvote",
+                type:"post",
+                data:{
+                    answerid:answerid,
+                    csrfmiddlewaretoken:"{{csrf_token}}"
+                },
+                dataType:'json',
+                success:function(res){
+                    var _prevupvote=$(".upvote-count-"+answerid).text();
+                    if(res.bool==true){
+                        $(".upvote-count-"+answerid).text(parseInt(_prevupvote)+1);
+                    }
+                }
+            });
+        });
+
+        // Downvote
+        $(".downvote-click").on('click',function(){
+            var answerid=$(this).data('answer');
+            // Ajax
+            $.ajax({
+                url:"/save-downvote",
+                type:"post",
+                data:{
+                    answerid:answerid,
+                    csrfmiddlewaretoken:"{{csrf_token}}"
+                },
+                dataType:'json',
+                success:function(res){
+                    var _prevupvote=$(".downvote-count-"+answerid).text();
+                    if(res.bool==true){
+                        $(".downvote-count-"+answerid).text(parseInt(_prevupvote)+1);
+                    }
+                }
+            });
+        });
+
+        });
+    </script>
+{% endblock %}
