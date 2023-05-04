@@ -5,13 +5,30 @@ from .models import *
 from django.core.paginator import Paginator
 from django.contrib import messages
 from .forms import *
-from django.contrib.auth.forms import UserCreationForm
+from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
+from django.contrib.auth import authenticate, login
 from django.db.models import Count
 # Create your views here.
 
 
 #Home page
 def index(request):
+    quests=Question.objects.all()
+    tags=[]
+    for quest in quests:
+        qtags=[tag.strip() for tag in quest.tags.split(',')]
+        for tag in qtags:
+            if tag not in tags:
+                tags.append(tag)
+    # Fetch Questions
+    tag_with_count=[]
+    for tag in tags:
+        tag_data={
+            'name':tag,
+            'count':Question.objects.filter(tags__icontains=tag).count()
+        }
+        tag_with_count.append(tag_data)
+
     if 'q' in request.GET:
         q=request.GET['q']
         quests=Question.objects.annotate(total_comments=Count('answer__comment')).filter(title__icontains=q).order_by('-id')
@@ -20,7 +37,7 @@ def index(request):
     paginator=Paginator(quests,5)
     page_num=request.GET.get('page',1)
     quests=paginator.page(page_num)
-    return render(request,'index.html',{'quests':quests})
+    return render(request,'index.html',{'quests':quests, 'tags':tag_with_count})
 
 
 # Detail
@@ -49,13 +66,6 @@ def detail(request,id):
 def notification(request):
     return render(request,'notification.html')
 
-def tags(request):
-    return render(request,'tags.html')
-
-
-
-def signin(request):
-    return render(request,'registration/signin.html')
 
 # Save-commnet
 def save_comment(request):
@@ -104,7 +114,7 @@ def save_downvote(request):
             return JsonResponse({'bool':True})
         
 # User Register
-def signup(request):
+def register(request):
     form=UserCreationForm
     if request.method=='POST':
         regForm=UserCreationForm(request.POST)
@@ -112,6 +122,20 @@ def signup(request):
             regForm.save()
             messages.success(request,'User has been registered!!')
     return render(request,'registration/signup.html',{'form':form})
+
+# Sign In 
+def signin(request):
+    form = AuthenticationForm()
+    if request.method == 'POST':
+        login_form = AuthenticationForm(request=request, data=request.POST)
+        if login_form.is_valid():
+            username = login_form.cleaned_data.get('username')
+            password = login_form.cleaned_data.get('password')
+            user = authenticate(request=request, username=username, password=password)
+            if user is not None:
+                login(request, user)
+                messages.success(request, f'Welcome back, {username}!')
+    return render(request, 'registration/signin.html', {'form': form})
 
 
 # Ask Form
@@ -136,7 +160,33 @@ def tag(request,tag):
     return render(request,'topic.html',{'quests':quests,'tag':tag})
 
 
+def profile(request):
+    # if not request.user.is_authenticated:
+    #     login_form = AuthenticationForm()
+    #     return render(request, 'registration/login.html', {'form': login_form})
+    
+    quests = Question.objects.filter(user=request.user).order_by('-id')
+    answers = Answer.objects.filter(user=request.user).order_by('-id')
+    comments = Comment.objects.filter(user=request.user).order_by('-id')
+    upvotes = Upvote.objects.filter(user=request.user).order_by('-id')
+    downvotes = Downvote.objects.filter(user=request.user).order_by('-id')
+    
+    if request.method == 'POST':
+        profile_form = ProfileForm(request.POST, instance=request.user)
+        if profile_form.is_valid():
+            profile_form.save()
+            messages.success(request, 'Profile has been updated.')
+    
+    form = ProfileForm(instance=request.user)
 
+    return render(request, 'registration/profile.html', {
+        'form': form,
+        'quests': quests,
+        'answers': answers,
+        'comments': comments,
+        'upvotes': upvotes,
+        'downvotes': downvotes,
+    })
 
 # Tags Page
 def tags(request):

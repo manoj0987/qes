@@ -22,3 +22,4 @@ class DownvoteAdmin(admin.ModelAdmin):
     list_display=('answer','user')
 admin.site.register(Downvote,DownvoteAdmin)
 
+

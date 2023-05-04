@@ -1,6 +1,105 @@
 {% include 'navbar.html' %}
 {% load static %}
-{% block title %}QES - Profile{% endblock %}
+<title>QES - Profile</title>
 {% block content %}
+<style>
+    .nav-pills button{
+        font-size: 18px;
+        font-weight: 700;
+    }
+</style>
+<div class="container py-5">
+    <div class="row">
+        <div class="col-md-2">
+            <div class="nav flex-column nav-pills me-3" id="v-pills-tab" role="tablist" aria-orientation="vertical">
+                <button class="nav-link active" id="v-pills-profile-tab" data-bs-toggle="pill" data-bs-target="#v-pills-profile" type="button" role="tab" aria-controls="v-pills-home" aria-selected="true">Profile</button>
+                <button class="nav-link" id="v-pills-questions-tab" data-bs-toggle="pill" data-bs-target="#v-pills-questions" type="button" role="tab" aria-controls="v-pills-profile" aria-selected="false">Questions</button>
+                <button class="nav-link" id="v-pills-answers-tab" data-bs-toggle="pill" data-bs-target="#v-pills-answers" type="button" role="tab" aria-controls="v-pills-messages" aria-selected="false">Answers</button>
+                <button class="nav-link" id="v-pills-comments-tab" data-bs-toggle="pill" data-bs-target="#v-pills-comments" type="button" role="tab" aria-controls="v-pills-settings" aria-selected="false">Comments</button>
+            </div>
+        </div>
+        <div class="col-md-10">
+            <div class="tab-content" id="v-pills-tabContent">
+                <div class="tab-pane fade show active" id="v-pills-profile" role="tabpanel" aria-labelledby="v-pills-profile-tab" tabindex="0">
+                <div class="card">
+                    <h5 class="card-header">Edit Profile</h5>
+                    <div class="card-body">
+                        {% for msg in messages %}
+                        <p class="text-success">{{msg}}</p>
+                        {% endfor %}
+                        <form method="post">
+                            {% csrf_token %}
+                            <table class="table table-bordered">
+                                {{form.as_table}}
+                                <tr>
+                                    <td colspan="2">
+                                        <button class="btn btn-primary">Submit</button>
+                                    </td>
+                                </tr>
+                            </table>
+                        </form>
+                    </div>
+                </div>
+                </div>
+                <div class="tab-pane fade" id="v-pills-questions" role="tabpanel" aria-labelledby="v-pills-questions-tab" tabindex="0">
+                <div class="card">
+                    <h5 class="card-header">My Questions <span class="badge badge-info">{{quests.count}}</span></h5>
+                    <div class="card-body">
+                        {% for quest in quests %}
+                        <p><a href="/detail/{{quest.id}}">{{quest.title}}</a></p>
+                        <hr />
+                        {% endfor %}
+                    </div>
+                </div>
+                </div>
+                <div class="tab-pane fade" id="v-pills-answers" role="tabpanel" aria-labelledby="v-pills-answers-tab" tabindex="0">
+                    <div class="card">
+                    <h5 class="card-header">My Answers <span class="badge badge-info">{{answers.count}}</span></h5>
+                    <div class="card-body">
+                        <table class="table table-bordered">
+                            <tr>
+                                <th>Question</th>
+                                <th>Answer</th>
+                            </tr>
+                            {% for ans in answers %}
+                            <tr>
+                                <td><a href="/detail/{{ans.question.id}}">{{ans.question.title}}</a></td>
+                                <td><a href="/detail/{{ans.question.id}}">{{ans.detail}}</a></td>
+                            </tr>
+                            {% endfor %}
+                        </table>
+                    </div>
+                </div>
+                </div>
+                <div class="tab-pane fade" id="v-pills-comments" role="tabpanel" aria-labelledby="v-pills-comments-tab" tabindex="0">
+                <div class="card">
+                    <h5 class="card-header">My Comments <span class="badge badge-info">{{comments.count}}</span></h5>
+                    <div class="card-body">
+                        <table class="table table-bordered">
+                            <tr>
+                                <th>Question</th>
+                                <th>Answer</th>
+                                <th>Comment</th>
+                            </tr>
+                            {% for comment in comments %}
+                            <tr>
+                                <td><a href="/detail/{{comment.answer.question.id}}">{{comment.answer.question.title}}</a></td>
+                                <td><a href="/detail/{{comment.answer.questionans.question.id}}">{{comment.answer.detail}}</a></td>
+                                <td><a href="/detail/{{comment.answer.question.id}}">{{comment.comment}}</a></td>
+                            </tr>
+                            {% endfor %}
+                        </table>
+                    </div>
+                </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
 
+
+<div class="d-flex align-items-start">
+    
+    
+</div>
 {% endblock %}

@@ -13,8 +13,10 @@ urlpatterns = [
     path('notification', views.notification, name='notification'),
 
     # User Register
-    path('accounts/signup/', views.signup, name='signup'),
+    path('accounts/signup/', views.register, name='register'),
     path('accounts/signin/', views.signin, name='signin'),
+    # Profile
+    path('accounts/profile/',views.profile,name='profile'),
     # Ask QUestion
     path('ask-question',views.ask_form,name='ask-question'),
     # tag page

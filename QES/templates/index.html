@@ -70,18 +70,10 @@
     <section class="section-1"> 
         <div class="side-menu">
             <h4>Topics</h4>
-            <div class="post">+ Create Tag</div>
-            <ul>
+            <!-- <div class="post">+ Create Tag</div> -->
+            <ul style="display: flex; flex-wrap: wrap; margin-right: 15px; padding-left: 15px;">
                 {% for tag in tags %}
-                <li>{{tag.name}}</li>
-                <!-- <li>Software</li>
-                <li>Development</li>
-                <li>AI</li>
-                <li>ML</li>
-                <li>Python</li>
-                <li>Java</li>
-                <li>HTML</li>
-                <li>CSS</li> -->
+                <li><a href="/tag/{{tag.name}}" class="badge rounded-pill text-bg-primary" style="padding: 6px; margin: 2px;">{{tag.name}}</a></li>
                 {% endfor %}
             </ul>
             <div class="foot">

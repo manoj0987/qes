@@ -1,16 +1,17 @@
 {% include 'navbar.html' %}
-{% block title %}QES - Topics{% endblock %}
+<title>QES - Topics</title>
 {% block content %}
-    <h1>Topics</h1>
+    
     <!-- Question List -->
     <div class="container py-5">
+        <h2>Topics</h2>
         <div class="row">
             {% for tag in tags %}
             <div class="col-2">
-                <div class="card">
+                <div class="card my-2">
                     <div class="card-body">
-                        <p class="card-text"><a href="/tag/{{tag.name|slugify}}">{{tag.name}} 
-                        <span class="badge badge-info">{{tag.count}}</span></a></p>
+                        <p class="card-text"><a href="/tag/{{tag.name|slugify}}"><strong>{{tag.name}}</strong> 
+                        <span class="badge rounded-pill text-bg-primary">{{tag.count}}</span></a></p>
                     </div>
                 </div>
             </div>

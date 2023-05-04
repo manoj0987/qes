@@ -6,7 +6,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="author" content="Manoj Kumar">
-    <meta name="keywords" content="HTML, CSS, JavaScript, Python, Django framework, MySQL, Bootstrap">
+    <meta name="keywords" content="HTML, CSS, JavaScript, Python, Django framework, SQLite, Bootstrap, jQuery, Ajax">
     <meta name="description" content="Quora for Engineering Students">
     <link rel="shortcut icon" href="{% static 'img/favicon.ico' %}" type="image/x-icon">
     <!-- Bootstrap -->
@@ -20,7 +20,7 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" integrity="sha512-iecdLmaskl7CVkqkXNQ/ZH/XLlvWZOJyj7Yy7tcenmpD1ypASozpmT/E0iPtmFIB46ZmdtAc9eNBvH0H/ZpiBw==" crossorigin="anonymous" referrerpolicy="no-referrer" />
     
     
-    <title>{% block title %}QES{% endblock %}</title>
+    <title>{% block title %}QES - Home{% endblock %}</title>
 </head>
 <body>
     <header>
@@ -38,20 +38,20 @@
                 <input class="form-control" name="q" type="search" placeholder="Search" aria-label="Search">
                 <button class="bi bi-search btn-sch" type="submit"></button>
             </form>
-            <div style="display: flex; align-items: center;">
+            <div style="display: flex; align-items: center; margin-left: 18px;">
                 {% if user.is_authenticated %}
                     <li class="nav-item btn" style="display: flex;">
                         <i class="bi bi-person-fill"></i><a href="/accounts/profile">Profile</a>
                     </li>
                     <li class="nav-item">
-                        <a href="{% url 'signin' %}">Log Out</a>
+                        <a href="{% url 'signin' %}" class="out">Log Out</a>
                     </li>
                 {% else %}
                     <li class="nav-item">
                         <a href="/accounts/signin">Log In</a>
                     </li>
                     <li class="nav-item">
-                        <a href="/accounts/signup">Register</a>
+                        <a href="/accounts/signup" class="out">Register</a>
                     </li>
                 {% endif %}
             </div>
@@ -60,6 +60,9 @@
     </header>
 
     <style>
+        .out:hover {
+            color: #000;
+        }
         header { position: sticky; width: 100%;}
         li { list-style: none; }
         a { text-decoration: none; }
@@ -150,7 +153,8 @@
         }
     </style>
 
-    {% block content %}{% endblock %}
+    {% block content %}
+    {% endblock %}
 </body>
 </html>
 
