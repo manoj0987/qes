@@ -1,0 +1,55 @@
+.container-det { 
+    margin: 0px 20px;
+}
+
+.save-comment {
+    border: 2px solid green;
+    border-radius: 5px;
+    padding: 5px 10px;
+    color: green;
+    font-weight: 700;
+    margin-top: 10px;
+}
+
+.save-comment:hover {
+    background: green;
+    color: #fff;
+}
+
+.detail-sep {
+    display: flex;
+    padding: 0px 15px;
+}
+
+.detail-sep>.row {
+    height: fit-content;
+    padding-right: 5px;
+}
+
+.batch { 
+    outline: 1px solid #aec9e4;
+    background-color: #fffbf4;
+    padding: 5px;
+    border-radius: 5px;
+}
+
+.btn-dark {
+    font-weight: 700;
+}
+
+.btn-dark:hover { 
+    color: #0187b8; 
+}
+
+textarea { 
+    width: 100%;
+}
+
+.ani {
+    animation: scale .1s linear forwards;
+}
+
+@keyframes scale {
+    0%{transform: scale(0.8);}
+    100%{transform: scale(1);}
+}

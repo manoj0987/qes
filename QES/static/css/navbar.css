@@ -1,0 +1,91 @@
+.out:hover {
+    color: #000;
+}
+header { position: sticky; width: 100%;}
+li { list-style: none; }
+a { text-decoration: none; }
+header {  box-shadow: 0px 15px 13px -15px #111;}
+
+header .nav-bar{
+    display: flex;
+    margin: 0px 50px;
+    height: 70px;
+    align-items: center;
+} 
+
+header .nav-bar .logo a img {
+    width: 100%;
+    height: 70px;
+}
+
+header .nav-menu {
+    display: flex;
+    align-items: center;
+    justify-content: space-evenly;
+    margin: auto;
+    width: 50%;
+    height: 100%;
+    padding-left: 0;
+}
+
+header .nav-menu li, .btn { position: relative; padding: 8px;}
+
+header .nav-menu li:hover, .btn:hover {
+    background-color: #FFF1DC;
+    border-top-left-radius: 5px;
+    border-top-right-radius: 5px;
+} 
+
+header .nav-menu li a, .btn a, .nav-item a {
+    color: #3A98B9;
+    font-size: 20px;
+    font-weight: 700;
+}
+header .btn { margin-left: 10px;}
+header .nav-item { margin-right: 8px; width: fit-content; }
+header .nav-menu li:after, .btn:after {
+    content: "";
+    position: absolute;
+    width: 0%;
+    height: 3px;
+    background-color: #3A98B9;
+    left: 0;
+    bottom: -5px;
+    transition: width 0.2s ease-in-out;
+}
+
+header .nav-menu li:hover:after, .btn:hover:after { width: 100%;}
+
+header .nav-menu li a:hover, .btn a:hover { color: #000;}
+
+header a.bi.bi-bell-fill, a.bi.bi-person-fill { color: #000;}
+
+header .bi { color: #000; font-size: 20px;}
+
+header .bi:hover, a.bi.bi-bell-fill:hover, a.bi.bi-person-fill:hover { color: #3A98B9;}
+
+header .form-control {
+    margin: auto;
+    align-items: center;
+    margin-right: 0;
+    background-color: #fff7eb8f; 
+    color: #acacac;
+    border-top-right-radius:0;
+    border-bottom-right-radius:0;
+}
+
+header .btn-sch {
+    background: #3A98B9;
+    border: 2px solid #23657d;
+    color: #fff;
+    border-radius: 5px;
+    margin: auto;
+    align-items: center;
+    padding: 5px 10px;
+}
+
+header .btn-sch:hover{ 
+    background: #198754;
+    color: #fff;
+    border: 2px solid #0f633c;
+}

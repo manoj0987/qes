@@ -1,13 +1,9 @@
 {% include 'navbar.html' %}
 {% load static %}
-<title>QES - Profile</title>
+{% block css %}
+    <link rel="stylesheet" type="text/css" href="{% static 'css/profile.css' %}">
+{% endblock %}
 {% block content %}
-<style>
-    .nav-pills button{
-        font-size: 18px;
-        font-weight: 700;
-    }
-</style>
 <div class="container py-5">
     <div class="row">
         <div class="col-md-2">

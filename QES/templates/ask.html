@@ -1,23 +1,9 @@
+{% load static %}
 {% include 'navbar.html' %}
-<title>QES - Ask</title>
+{% block css %}
+    <link rel="stylesheet" type="text/css" href="{% static 'css/ask.css' %}">
+{% endblock %}
 {% block content %}
-    <style>
-        input, textarea {
-            width: 100%;
-        }
-        .button {
-            border: 2px solid green;
-            border-radius: 5px;
-            padding: 5px 10px;
-            color: green;
-            font-weight: 700;
-            margin-top: 10px;
-        }
-        .button:hover {
-            background: green;
-            color: #fff;
-        }
-    </style>
     <div class="container">
         <div class="card mt-5">
             <h5 class="card-header">Ask Question</h5>
